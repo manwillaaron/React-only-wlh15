@@ -1,0 +1,20 @@
+.post-container{
+    width: 90%;
+    border: black 1px solid;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 50px;
+}
+
+.post-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.content{
+    word-wrap: break-word;
+}

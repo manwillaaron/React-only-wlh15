@@ -43,32 +43,35 @@ class App extends React.Component {
   };
 
   deletePost = id => {
-   const filteredArr = this.state.posts.filter(el => el.id !== id)
-   this.setState({posts: filteredArr})
+    const filteredArr = this.state.posts.filter(el => el.id !== id);
+    this.setState({ posts: filteredArr });
   };
 
   render() {
     return (
       <div className="App">
         <Header />
-        <Form
-          handleChange={this.handleChange}
-          title={this.state.title}
-          img={this.state.img}
-          content={this.state.content}
-          submitPost={this.submitPost}
-        />
-        {
-        this.state.posts.map(el => (
-          <Posts
+        <div className='not-header'>
+          <Form
+            handleChange={this.handleChange}
+            title={this.state.title}
+            img={this.state.img}
+            content={this.state.content}
+            submitPost={this.submitPost}
+          />
+          <div className='posts'>
+
+          {this.state.posts.map(el => (
+            <Posts
             id={el.id}
             title={el.title}
             img={el.img}
             content={el.content}
             deletePost={this.deletePost}
-          />
-        ))
-        }
+            />
+            ))}
+            </div>
+        </div>
       </div>
     );
   }
