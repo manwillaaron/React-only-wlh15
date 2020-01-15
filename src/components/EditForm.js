@@ -3,7 +3,7 @@ import "./css/Form.css";
 
 export default function Form(props) {
   return (
-    <div className='form-container'>
+    <div className="form-container">
       <input
         className="form-input"
         name="name"
@@ -21,7 +21,7 @@ export default function Form(props) {
       <input
         className="form-input"
         name="img"
-        type='url'
+        type="url"
         placeholder="Image"
         onChange={e => props.handleChange(e)}
         value={props.img}
@@ -33,7 +33,7 @@ export default function Form(props) {
         onChange={e => props.handleChange(e)}
         value={props.content}
       />
-      <button onClick={() => props.submitPost()}>Submit Post</button>
+      <button onClick={() => props.editPost()}>Submit Edit</button>
     </div>
   );
 }
