@@ -1,10 +1,11 @@
-import React from "react";
+import React, {Component} from "react";
 import "./App.css";
 import Header from "./components/Header";
 import Posts from "./components/Posts";
-import Form from "./components/Form";
-import EditForm from "./components/EditForm";
-import axios from "axios";
+import Routes from './Routes'
+import axios from "axios"
+import {getPosts} from './dux/reducer'
+import {connect} from 'react-redux'
 
 class App extends React.Component {
   constructor() {
@@ -22,7 +23,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get("http://localhost:4321/api/posts").then(result => this.setState({ posts: result.data }))
+    console.log(this.props)
+    this.props.getPosts()
   }
 
   handleChange = e => {
@@ -30,10 +32,10 @@ class App extends React.Component {
     this.setState({ [name]: value });
   };
 
-  editPost = () => {
-    let { editId, title, img, content, name } = this.state;
+  editPost = (obj) => {
+    let { id, title, img, content, name } = obj;
     axios
-      .put(`http://localhost:4321/api/post/${editId}`, {
+      .put(`http://localhost:4321/api/post/${id}`, {
         title,
         img,
         content,
@@ -48,68 +50,45 @@ class App extends React.Component {
           content: "",
           name: "",
           toggleEdit: false
+        }, ()=> {
+          this.props.getPosts()
         });
-      });
+      } )  
   };
 
-  toggle = id => {
-    console.log(id);
-    const editObj = this.state.posts.filter(el => id === el.id);
-    console.log(editObj[0].title);
-    const { title, content, img, name } = editObj[0];
-    this.setState(
-      {
-        toggleEdit: !this.state.toggleEdit,
-        editId: id,
-        name: name,
-        img: img,
-        content: content,
-        title: title
-      },
-      () => console.log(this.state)
-    );
-  };
 
   submitPost = () => {
     const { title, img, content, name } = this.state;
     axios
       .post("http://localhost:4321/api/post", { title, img, content, name })
       .then(res => {
-        this.setState({ posts: res.data });
+        this.props.getPosts()
       });
   };
 
   deletePost = id => {
-    const filteredArr = this.state.posts.filter(el => el.id !== id);
-    this.setState({ posts: filteredArr });
+    let postsF = this.state.posts.filter(el => el.id !== id)
+    axios.delete(`/api/post/${id}`).then(res => this.props.getPosts()).catch(err=> alert('was not able to delete post'))
+    this.setState({ posts:  postsF});
   };
 
   render() {
+    console.log('render', this.props);
     return (
       <div className="App">
         <Header />
         <div className="not-header">
-          {!this.state.toggleEdit ? (
-            <Form
-              handleChange={this.handleChange}
-              title={this.state.Title}
-              img={this.state.img}
-              name={this.state.name}
-              content={this.state.Content}
-              submitPost={this.submitPost}
-            />
-          ) : (
-            <EditForm
-              handleChange={this.handleChange}
-              title={this.state.title}
-              img={this.state.img}
-              name={this.state.name}
-              content={this.state.content}
-              editPost={this.editPost}
-            />
-          )}
+          <Routes 
+             handleChange={this.handleChange}
+             title={this.state.title}
+             img={this.state.img}
+             name={this.state.name}
+             content={this.state.content}
+             editPost={this.editPost}
+             submitPost={this.submitPost}
+          />
           <div className="posts">
-            {this.state.posts.map(el => (
+            {this.props.postState.posts.map(el => (
               <Posts
                 key={el.id}
                 id={el.id}
@@ -127,4 +106,10 @@ class App extends React.Component {
   }
 }
 
-export default App;
+function mapStateToProps(state){
+  return {
+    ...state
+  }
+}
+
+export default connect(mapStateToProps, {getPosts})(App);
