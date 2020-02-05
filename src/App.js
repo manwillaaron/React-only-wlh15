@@ -6,6 +6,7 @@ import Routes from './Routes'
 import axios from "axios"
 import {getPosts} from './dux/reducer'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
 
 class App extends React.Component {
   constructor() {
@@ -60,7 +61,7 @@ class App extends React.Component {
   submitPost = () => {
     const { title, img, content, name } = this.state;
     axios
-      .post("http://localhost:4321/api/post", { title, img, content, name })
+      .post("/api/post", { title, img, content, name })
       .then(res => {
         this.props.getPosts()
       });
@@ -87,7 +88,8 @@ class App extends React.Component {
              editPost={this.editPost}
              submitPost={this.submitPost}
           />
-          <div className="posts">
+          {/* <div className="posts">
+            <Link to='/add'>Add Post</Link>
             {this.props.postState.posts.map(el => (
               <Posts
                 key={el.id}
@@ -99,7 +101,7 @@ class App extends React.Component {
                 toggle={this.toggle}
               />
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     );

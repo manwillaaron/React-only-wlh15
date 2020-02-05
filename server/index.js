@@ -3,6 +3,7 @@ const express = require('express')
 const app = express()
 const SERVER_PORT = 4321
 const c = require('./controllers/controller')
+const ac = require('./controllers/authController')
 const {CONNECTION_STRING} = process.env
 const session = require('express-session')
 const massive  = require('massive')
@@ -25,6 +26,11 @@ app.use(session({
 app.use(express.json())
 
 app.get('/api/posts', c.getPosts)
+// app.get('/api/user/posts', c.getPostsbyUserId)
 app.post('/api/post', c.addPost)
 app.put('/api/post/:id', c.editPost)
 app.delete('/api/post/:id', c.deletePost)
+
+app.post('/auth/user', ac.register)
+app.post('/auth/login', ac.login)
+app.get('/auth/check', ac.sessionCheck)

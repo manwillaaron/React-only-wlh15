@@ -2,6 +2,8 @@ import React from 'react';
 import EditForm from './components/EditForm';
 import Form from './components/Form';
 import { Route, Switch } from 'react-router-dom';
+import Login from './components/Login'
+import Posts from './components/Posts';
 
 
 const Routes = props => (
@@ -33,6 +35,8 @@ const Routes = props => (
         />
       )}
     />
+    <Route path='/' exact component={Login}/>
+    <Route path='/posts' component={Posts}/>
   </Switch>
 );
 

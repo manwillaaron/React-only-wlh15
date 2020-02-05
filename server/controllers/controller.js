@@ -5,12 +5,9 @@ module.exports = {
     res.status(200).send(posts);
   },
   async addPost(req, res) {
+    const db = req.app.get('db')
     const { title, content, img, name } = req.body;
-    const posts = req.app.get('db').query(
-      `insert into posts (title, content, img, name ) 
-        values (${title},${content},${img},${name});
-        select * from posts;`
-    )
+    const posts = await db.add_post({title, content, img, name});
     res.status(200).send(posts);
   },
   async editPost(req, res) {
